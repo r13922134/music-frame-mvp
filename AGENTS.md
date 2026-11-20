@@ -44,3 +44,11 @@ Context: Raspberry Pi 4-based music artwork display and optional rear WS2812B am
 4. Propose/measure a real audio signal acquisition path for beat-reactive lighting; do NOT implement fake 'reactive' lights driven only by track metadata and label them as synchronized.
 
 **Acceptance / ethics:** No fake repos, no invented device tests, no exposed tokens. The current frontend glow and `lighting.driver=mock` are software previews only. Feature status must remain accurate.
+\n## Next bottleneck after OAuth: issue #2 (do not confuse this with PR #1)
+
+[Issue #2 — AirPlay 2 multiroom PCM capture and measured LED-event alignment](https://github.com/r13922134/music-frame-mvp/issues/2) is the most technically painful **Raspberry Pi** challenge. The display frame has separate wireless speakers; **no cable is permitted from frame to speakers**. Spotify's metadata API cannot provide beat-level PCM. Shairport Sync cannot snoop another speaker's audio stream; test a simultaneous AirPlay 2 receiver topology first, then a replayable PCM analyzer and actual audible-light latency measurement. Label feasibility as unproven until hardware testing. OpenSCAD enclosure modeling comes after power/thermal and geometry constraints stabilize.
+
+**First Devin instruction for this issue:** Run existing unit tests, read Issue #2, investigate Shairport Sync AirPlay 2 NQPTP and the PCM output path, produce synthetic-input DSP tests and reproducible timing measurements, then open a PR with `Closes #2`; avoid promising real multiroom synchronization until tested.
+
+---
+
