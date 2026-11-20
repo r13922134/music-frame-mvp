@@ -1,3 +1,29 @@
+# Devin: first instruction / first pull request
+
+**Issue to close:** [#1 — Spotify PKCE onboarding for headless Raspberry Pi](https://github.com/r13922134/music-frame-mvp/issues/1).
+
+```text
+Clone https://github.com/r13922134/music-frame-mvp. First run:
+python3 -m unittest discover -s tests -v
+python3 src/frame.py --mode demo
+Open a PR titled "feat(auth): Spotify PKCE login and refresh" with "Closes #1".
+Implement /auth/start and /auth/callback with PKCE S256, state validation,
+persistent refresh-token support, tests, README setup, and an SSH-tunnel
+loopback callback for headless Raspberry Pi; do not implement LED GPIO yet.
+Keep Spotify callback bound to 127.0.0.1:8765. No public IP/domain.
+```
+
+**Headless OAuth callback:** Spotify registered redirect URI `http://127.0.0.1:8765/auth/callback` (not `localhost`). On the user's laptop:
+
+```bash
+ssh -N -L 127.0.0.1:8765:127.0.0.1:8765 pi@musicframe.local
+# In laptop browser: http://127.0.0.1:8765/auth/start
+```
+
+The laptop browser's Spotify redirect reaches its own loopback and is forwarded over SSH to the Pi. Full tests, security details and acceptance criteria are in [Issue #1](https://github.com/r13922134/music-frame-mvp/issues/1). Without a laptop tunnel or Pi-local browser, a phone login cannot directly callback to the Pi using this URI.
+
+---
+
 # Devin implementation brief / acceptance criteria
 
 Context: Raspberry Pi 4-based music artwork display and optional rear WS2812B ambient RGB halo. External speakers are **not** wired to the display. Prototype currently contains a local runnable demo and metadata adapter; it has **not** been deployed to physical hardware.
