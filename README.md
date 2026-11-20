@@ -58,5 +58,5 @@ GitHub Actions runs five unittest / local HTTP smoke checks on Python 3.11 and 3
 
 ## Visual diagram
 
-- `docs/architecture.png` — static architecture image.
-- `docs/architecture.svg` / `docs/architecture.dot` / `docs/architecture.mmd` — editable diagram sources.
+- [`docs/architecture.md`](docs/architecture.md) — GitHub-rendered Mermaid system diagram and integration notes.
+- [`docs/architecture.mmd`](docs/architecture.mmd) / [`docs/architecture.dot`](docs/architecture.dot) — editable diagram sources.
