@@ -1,0 +1,20 @@
+digraph MusicFrame {
+  graph [rankdir=LR, bgcolor="#f8fafc", fontname="Noto Sans CJK TC", pad="0.25", nodesep="0.55", ranksep="0.7", label="MUSIC FRAME · MVP v0.1 architecture", labelloc=t, fontsize=22, fontcolor="#172033"];
+  node [shape=box, style="rounded,filled", fontname="Noto Sans CJK TC", fontsize=12, margin="0.21,0.15", color="#d0d8e1", fillcolor="white", fontcolor="#202b3a"];
+  edge [color="#8194a8", arrowsize=.8, penwidth=1.5, fontname="Noto Sans CJK TC", fontsize=10, fontcolor="#536476"];
+  phone [label="Phone + Spotify", fillcolor="#e8f3ed", color="#8ebda0"];
+  spotify [label="Spotify API\n(current track)", fillcolor="#e8f3ed", color="#8ebda0"];
+  demo [label="Offline demo\n(3 mock tracks)", fillcolor="#e8f3ed", color="#8ebda0"];
+  provider [label="Python source adapter\nnormalize state", fillcolor="#dfeaf8", color="#8aaed0"];
+  api [label="localhost API\nGET /api/state", fillcolor="#dfeaf8", color="#8aaed0"];
+  screen [label="Chromium kiosk\nAlbum cover + metadata", fillcolor="#dfeaf8", color="#8aaed0"];
+  mock [label="Ambient light intent\nMOCK driver", fillcolor="#fff0d5", color="#e0b36e"];
+  gpio [label="Future GPIO18 driver\n74AHCT125 + LED strip", fillcolor="#fff0d5", color="#e0b36e"];
+  source [label="Future audio source\n(audio samples required)", fillcolor="#ffe6e6", color="#dda1a1"];
+  beat [label="Future beat analysis", fillcolor="#ffe6e6", color="#dda1a1"];
+  phone -> spotify -> provider -> api -> screen;
+  demo -> provider;
+  api -> mock;
+  mock -> gpio [style=dashed, label="not built"];
+  source -> beat -> gpio [style=dashed, label="not built"];
+}

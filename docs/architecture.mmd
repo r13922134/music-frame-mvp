@@ -1,0 +1,13 @@
+flowchart TD
+    phone[Phone playing music] --> spotify[Spotify user account / Web API]
+    spotify --> adapter[Python metadata adapter (poll)]
+    demo[Offline demo track generator] --> adapter2[Demo adapter]
+    adapter --> state[Normalized TrackState]
+    adapter2 --> state
+    state --> api[localhost HTTP /api/state]
+    api --> ui[Chromium kiosk / HDMI album-art screen]
+    state --> intent[Ambient light policy / mock output]
+    intent -. Future hardware implementation .-> gpio[GPIO18 → 74AHCT125 → WS2812B]
+    audio[Music audio signal] -. NOT available via Spotify metadata API .-> beats[Future audio analyzer / source to be designed]
+    beats -. Future only .-> gpio
+    airplay[Optional AirPlay receiver with metadata] -. Future architecture branch .-> state
