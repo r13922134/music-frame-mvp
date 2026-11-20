@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Music Frame MVP</title>
+<style>
+:root { color-scheme:dark; font-family: -apple-system,BlinkMacSystemFont,"Noto Sans TC",system-ui,sans-serif; }
+* { box-sizing:border-box } body { margin:0; min-height:100vh; background:#080b11; color:#fff; display:grid; place-items:center; }
+.frame { width:min(91vw, min(84vh,760px)); padding:6.5%; border:1px solid #333; border-radius:11px; background:#12141a; box-shadow:0 18px 85px #000b; position:relative; }
+.art { width:100%; aspect-ratio:1; display:grid; place-items:center; overflow:hidden; background:radial-gradient(ellipse at 24% 28%,#e8d6b3 0%,transparent 42%), linear-gradient(133deg,var(--tone,#8a9bb7),#272638 80%); position:relative; }
+.art::before { content:""; width:68%; height:68%; border:3.5vmin solid #ffffff48; border-radius:50%; transform:translate(10%,12%); }
+.art::after { content:""; position:absolute; width:33%; height:33%; background:#ffffff23; rotate:45deg; top:11%; left:11%; }
+.art img { display:none; width:100%; height:100%; object-fit:contain; z-index:1; background:#090b10; }
+.meta { text-align:center; margin-top:6%; } h1 { font-size:clamp(17px,3.5vmin,34px); font-weight:650; margin:0 0 6px; letter-spacing:.01em } p { margin:0; color:#b7bdc9; font-size:clamp(12px,2vmin,17px); }
+.status { position:absolute; bottom:1.8%; right:3%; color:#a3a6b1; font-size:10px; letter-spacing:.13em; text-transform:uppercase; }
+.light { position:fixed; inset:4%; pointer-events:none; border-radius:44px; box-shadow:0 0 64px 12px var(--glow,#8a9bb733); opacity:.5; transition:box-shadow 1s; z-index:-1; animation:breathe 4s ease-in-out infinite; }
+@keyframes breathe {50% {opacity:.9} } @media (prefers-reduced-motion:reduce) {.light{animation:none}}
+.err {position:fixed; top:10px; left:10px; right:10px; font-size:12px; color:#ffb3a7; text-align:center}
+</style></head><body><div class="light" id="light"></div><section class="frame" aria-label="Now playing">
+<div class="art" id="art"><img id="cover" alt="專輯封面" /></div><div class="meta"><h1 id="title">Loading…</h1><p id="subtitle">Music Frame MVP</p></div><span class="status" id="status">DEMO</span></section><div class="err" id="err"></div>
+<script>
+const $=id=>document.getElementById(id);
+function shade(hex, alpha) {return /^#[0-9a-f]{6}$/i.test(hex) ? hex+alpha : '#8a9bb744';}
+async function render(){
+ try {const response=await fetch('/api/state',{cache:'no-store'}); if(!response.ok)throw Error('HTTP '+response.status);
+ const {track,lighting,error}=await response.json();
+ $('title').textContent=track.title; $('subtitle').textContent=track.artist+' · '+track.album;
+ $('status').textContent=track.source.toUpperCase()+' / '+track.status.toUpperCase(); $('err').textContent=error||'';
+ $('art').style.setProperty('--tone',track.color||'#8a9bb7');
+ $('light').style.setProperty('--glow',shade(lighting.color,lighting.mode==='off'?'00':'66'));
+ $('light').style.animationPlayState=lighting.mode==='off'?'paused':'running';
+ const img=$('cover'); if(track.cover_url){ if(img.src!==track.cover_url)img.src=track.cover_url; img.style.display='block';} else{img.style.display='none';img.removeAttribute('src');}
+ }catch(e){ $('err').textContent='Cannot reach local frame service: '+e.message; }
+}
+render();setInterval(render,1500);
+</script></body></html>
